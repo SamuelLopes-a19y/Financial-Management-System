@@ -1,39 +1,6 @@
-const bcrypt = require('bcryptjs')
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const prisma = require('./src/Data/databaseConnection')
 
-// --> 1 - Autentication
-const authenticatable = { 
-
-    emailValidation() {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        return regex.test(this.email)
-    },
-
-    async authentication(emailInput, passwordInput) {
-
-    // Looking for user email in BD  
-    const dbUser = await prisma.user.findUnique({ 
-        where: { email: emailInput } 
-    })
-
-    if (!dbUser) 
-        console.log("User not be found!.")
-
-    // Validate password: Verify there's this pass in DB
-    const matchPassword = await bcrypt.compare(passwordInput, dbUser.password)
-
-    if (!matchPassword) 
-        console.log("Incorrect password.")
-    
-    return dbUser
-
-    }
-
-}
- 
-// --> 2 - Moderator
-const moderable = {
+class Moderator{
 
     async addUser(name, email, password){
         //Verify there's already an email
@@ -42,15 +9,19 @@ const moderable = {
         if(userExist)
             console.log("This email has already been registeresd")
 
-        // Encrypting password in the database
-        passwordHash = await bcrypt.hash(password, 10)
+        // Encrypting password in database
+        let passwordHash = await bcrypt.hash(password, 10)
 
         try{
             const newUser = await prisma.user.create({
                 data: {
                     name: name,
                     email: email,
-                    password: passwordHash // Save hash, not password directly
+                    password: passwordHash, // Save hash, not password directly
+                    role: Role.USER, // Define como user padrão
+                    wallet: {
+                        create: { balance: 0 } // Já cria uma carteira vazia junto
+                    }
                 }
             })
             console.log(`User ${newUser.name} with ID ${newUser.id} has been created successfully!`)
@@ -60,7 +31,7 @@ const moderable = {
             return false;
         }
         
-    },
+    }
 
     async deleteUser(id){
         // Check if the user exists
@@ -80,23 +51,24 @@ const moderable = {
                 console.log("Error: This user does not exist, impossible to delete.")
             }
         }
-    },
+    }
 
     async editUser(id){
         // Check if the user exists
         const userExist = await prisma.user.findUnique({ where: id })
 
-        if(!userExist)
+        if(!userExist){
             console.log("This user ID does not exist")
+        }
 
-         try {
+        try {
             const editedUser = await prisma.user.update({ 
-                 data: {
+                data: {
                     name:  this.name,
                     email: this.email,
                     cel:   this.cel
                 }
-             })
+            })
 
             console.log(`User ${editedUser.name} - ID ${editedUser.id} has been edited successfully!`)
 
@@ -109,20 +81,6 @@ const moderable = {
             }
         }
     }
-
 }
 
-// --> 3 - Reports
-const reportable = {
-    async userReport(){
-        const userList = await prisma.user.findMany()
-    
-        if(userList == null)
-            console.log("There's no users registered")
-
-
-    }
-
-}
-
-module.exports = { authenticatable, reportable, moderable };
+module.exports = Moderator;

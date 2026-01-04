@@ -1,6 +1,4 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-const { autenticavel, moderavel, reportable} = require('./comportamentos');
+const prisma = require('./src/Data/databaseConnection')
 const { authenticatable, moderable } = require('./Behaviors');
 
 class Admin {
