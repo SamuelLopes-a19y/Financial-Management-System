@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faturas | Finance.io</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  
+  <div id="app">
+    <div class="app-shell">
+
+      <div id="sidebar-container"></div>
+
+      <main>
+        <header class="topbar">
+          <h2>Minhas Faturas</h2>
+        </header>
+
+        <section id="page-faturas">
+          <div class="card">
+            
+            <div class="toolbar" style="padding: 16px; border-bottom: 1px solid var(--border);">
+              <select id="filtroFatura" style="max-width: 200px;">
+                <option value="">Todas os Status</option>
+                <option value="pago">Pagas</option>
+                <option value="pendente">Pendentes</option>
+                <option value="atrasado">Atrasadas</option>
+              </select>
+              <button class="btn" id="btnGerarBoleto">Gerar boleto (demo)</button>
+            </div>
+
+            <table class="table" id="tblFaturas">
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Vencimento</th>
+                  <th>Status</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Cartão Crédito</td>
+                  <td>15/10/2023</td>
+                  <td><span class="status pendente">Pendente</span></td>
+                  <td>R$ 1.250,00</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

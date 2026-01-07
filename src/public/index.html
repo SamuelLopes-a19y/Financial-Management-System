@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Área do Cliente</title>
+  
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <section id="app">
+    <div class="app-shell">
+      <aside>
+        <div class="logo">🏦 Painel do Cliente</div>
+        <div class="row" style="justify-content:space-between">
+          <span class="chip" id="chipUser">👤 —</span>
+          <button class="btn ghost" id="btnLogout" title="Sair">Sair</button>
+        </div>
+        <div class="divider" style="margin:14px 0"></div>
+        <nav aria-label="Menu principal">
+          <a href="overview.html" data-page="overview" class="active">🏠 Visão Geral</a>
+          <a href="shopping.html" data-page="compras">🧾 Compras</a>
+          <a href="invoice.html" data-page="faturas">💳 Faturas</a>
+          <a href="profile.html" data-page="perfil">⚙️ Perfil</a>
+        </nav>
+      </aside>
+      <main>
+        <header class="topbar">
+          <input class="search" id="searchGlobal" placeholder="Pesquisar em tudo… (demo)"/>
+          <div class="row">
+            <button class="btn ghost" id="btnDark">Alternar tema</button>
+          </div>
+        </header>
+        <section id="page-assinaturas" class="hidden">
+          <div class="card" style="padding:16px">
+            <p class="muted">Assinaturas ativas e histórico (demo).</p>
+            <table class="table" id="tblAssinaturas"></table>
+          </div>
+        </section>
+        <section id="page-suporte" class="hidden">
+          <div class="card" style="padding:16px">
+            <h3>Abrir atendimento</h3>
+            <div class="grid" style="grid-template-columns:1fr 1fr">
+              <div>
+                <label>Assunto</label>
+                <input id="supAssunto" placeholder="Ex.: Dúvida sobre fatura"/>
+              </div>
+              <div>
+                <label>Categoria</label>
+                <select id="supCat">
+                  <option>Dúvidas</option>
+                  <option>Problemas técnicos</option>
+                  <option>Financeiro</option>
+                </select>
+              </div>
+            </div>
+            <label>Descrição</label>
+            <textarea id="supDesc" rows="5" style="width:100%;resize:vertical;padding:12px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--text)"></textarea>
+            <div class="row" style="justify-content:flex-end;margin-top:10px">
+              <button class="btn" id="btnAbrirChamado">Enviar</button>
+            </div>
+            <div class="divider"></div>
+            <h3>Meus chamados</h3>
+            <table class="table" id="tblChamados"></table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

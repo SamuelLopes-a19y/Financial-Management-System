@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visão Geral | Finance.io</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="app">
+    <div class="app-shell">
+
+      <div id="sidebar-container"></div>
+
+      <main>
+        
+        <header class="topbar">
+          <h2>Visão Geral</h2>
+        </header>
+
+        <section id="page-overview">
+          
+          <div class="cards">
+            <div class="card stat">
+              <h3>Gasto do mês</h3>
+              <strong id="statGasto">R$ 0,00</strong>
+              <div class="muted" style="font-size: 0.8rem; margin-top: 4px;">+12% vs mês anterior</div>
+            </div>
+            
+            <div class="card stat">
+              <h3>Faturas pendentes</h3>
+              <strong id="statPend">R$ 0,00</strong>
+            </div>
+
+            <div class="card stat">
+              <h3>Assinaturas ativas</h3>
+              <strong id="statAssin">0</strong>
+            </div>
+
+            <div class="card stat">
+              <h3>Saldo em Carteira</h3>
+              <strong id="walletValue" style="color: var(--brand);">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="card">
+            <div class="toolbar" style="padding: 16px; border-bottom: 1px solid var(--border);">
+              <h3 style="margin: 0; font-size: 1.1rem;">Movimentações Recentes</h3>
+            </div>
+            
+            <table class="table" id="tblRecentes" aria-label="Tabela de movimentações recentes">
+              <thead>
+                <tr>
+                  <th>Descrição</th>
+                  <th>Data</th>
+                  <th>Categoria</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Supermercado ABC</td>
+                  <td>Hoje</td>
+                  <td><span class="chip">Alimentação</span></td>
+                  <td>R$ 450,00</td>
+                </tr>
+                <tr>
+                  <td>Spotify</td>
+                  <td>Ontem</td>
+                  <td><span class="chip">Assinatura</span></td>
+                  <td>R$ 21,90</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+      </main>
+
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
