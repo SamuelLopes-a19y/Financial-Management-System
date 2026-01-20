@@ -2,20 +2,15 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Iniciando o seed do banco de dados...')
 
-  // 1. Limpeza: Deletar usuários (o Cascade deletará carteiras, faturas e compras automaticamente)
   await prisma.user.deleteMany()
-  console.log('🧹 Banco de dados limpo.')
+  console.log('Clear data Base.')
 
-  // ====================================================================
-  // USUÁRIO 1: SAMUEL (ADMIN) - Finanças Equilibradas
-  // ====================================================================
   const samuel = await prisma.user.create({
     data: {
       name: 'Samuel Silva',
       email: 'samuel.silva@exemplo.com',
-      password: '123', // Em produção, use hash (bcrypt)
+      password: '123', 
       cpf: '123.456.789-00',
       telefone: '(11) 99999-8888',
       role: 'ADMIN',
@@ -39,21 +34,18 @@ async function main() {
     },
     include: { wallet: true, shoppings: true, invoices: true }
   })
-  console.log(`✅ Usuário criado: ${samuel.name} (${samuel.role})`)
+  console.log(`Created User: ${samuel.name} (${samuel.role})`)
 
-  // ====================================================================
-  // USUÁRIO 2: MARIA (USER) - Endividada (Teste de Status OVERDUE)
-  // ====================================================================
   const maria = await prisma.user.create({
     data: {
       name: 'Maria Souza',
       email: 'maria.souza@exemplo.com',
       password: '123',
       cpf: '987.654.321-11',
-      role: 'USER', // Usuário padrão
+      role: 'USER', 
 
       wallet: {
-        create: { balance: 150.25 } // Saldo baixo
+        create: { balance: 150.25 }
       },
       shoppings: {
         create: [
@@ -63,19 +55,16 @@ async function main() {
       },
       invoices: {
         create: [
-          // Fatura Vencida (OVERDUE)
+          // Fatura Vencida 
           { description: 'Empréstimo Pessoal', amount: 1500.00, dueDate: new Date('2023-12-01'), status: 'OVERDUE' },
-          // Fatura Paga (PAID)
+          // Fatura Paga 
           { description: 'Internet Fibra', amount: 100.00, dueDate: new Date('2024-01-05'), status: 'PAID' }
         ]
       }
     }
   })
-  console.log(`✅ Usuário criado: ${maria.name} (${maria.role})`)
+  console.log(`Created User: ${maria.name} (${maria.role})`)
 
-  // ====================================================================
-  // USUÁRIO 3: CARLOS (USER) - Rico e Organizado (Teste de Status PAID)
-  // ====================================================================
   const carlos = await prisma.user.create({
     data: {
       name: 'Carlos Oliveira',
@@ -84,7 +73,7 @@ async function main() {
       role: 'USER',
 
       wallet: {
-        create: { balance: 25000.00 } // Saldo alto
+        create: { balance: 25000.00 } 
       },
       shoppings: {
         create: [
@@ -101,14 +90,14 @@ async function main() {
       }
     }
   })
-  console.log(`✅ Usuário criado: ${carlos.name} (${carlos.role})`)
+  console.log(`Created User: ${carlos.name} (${carlos.role})`)
 
-  console.log('🚀 Seed finalizado com sucesso!')
+  console.log('Seeding was finished!')
 }
 
 main()
   .catch(e => {
-    console.error('❌ Erro no seed:', e)
+    console.error('Seeding error:', e)
     process.exit(1)
   })
   .finally(async () => {
