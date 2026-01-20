@@ -6,7 +6,7 @@ const prismaClientSingleton = () => {
 
 const globalForPrisma = global
 
-// Se já existir uma instância no global, usa ela. Se não, cria uma nova.
+// Se já existir uma instância no global, usa-se ela. Se não, cria uma nova.
 const prisma = globalForPrisma.prisma || prismaClientSingleton()
 
 module.exports = prisma

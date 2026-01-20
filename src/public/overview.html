@@ -12,46 +12,35 @@
     <div class="app-shell">
 
       <div id="sidebar-container"></div>
-
       <main>
-        
         <header class="topbar">
           <h2>Visão Geral</h2>
         </header>
-
-        <section id="page-overview">
-          
+        <section id="overview-page">
           <div class="cards">
             <div class="card stat">
               <h3>Gasto do mês</h3>
-              <strong id="statGasto">R$ 0,00</strong>
-              <div class="muted" style="font-size: 0.8rem; margin-top: 4px;">+12% vs mês anterior</div>
+              <strong id="spenseValue">...</strong>
             </div>
-            
             <div class="card stat">
               <h3>Faturas pendentes</h3>
-              <strong id="statPend">R$ 0,00</strong>
+              <strong id="pendingStatus">...</strong>
             </div>
-
             <div class="card stat">
               <h3>Assinaturas ativas</h3>
-              <strong id="statAssin">0</strong>
+              <strong id="sigStatus">...</strong>
             </div>
-
             <div class="card stat">
               <h3>Saldo em Carteira</h3>
-              <strong id="walletValue" style="color: var(--brand);">R$ 0,00</strong>
+              <strong id="walletValue" style="color: var(--brand);">...</strong>
             </div>
           </div>
-
           <div style="height: 24px"></div>
-
           <div class="card">
             <div class="toolbar" style="padding: 16px; border-bottom: 1px solid var(--border);">
               <h3 style="margin: 0; font-size: 1.1rem;">Movimentações Recentes</h3>
-            </div>
-            
-            <table class="table" id="tblRecentes" aria-label="Tabela de movimentações recentes">
+            </div>    
+            <table class="table" id="tblRecents" aria-label="Recent Transactions Table">
               <thead>
                 <tr>
                   <th>Descrição</th>
@@ -62,24 +51,13 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Supermercado ABC</td>
-                  <td>Hoje</td>
-                  <td><span class="chip">Alimentação</span></td>
-                  <td>R$ 450,00</td>
-                </tr>
-                <tr>
-                  <td>Spotify</td>
-                  <td>Ontem</td>
-                  <td><span class="chip">Assinatura</span></td>
-                  <td>R$ 21,90</td>
+                   <td colspan="4" style="text-align: center; color: #888;">Carregando dados...</td>
                 </tr>
               </tbody>
             </table>
           </div>
-
         </section>
       </main>
-
     </div>
   </div>
 

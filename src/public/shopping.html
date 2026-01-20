@@ -10,33 +10,25 @@
 
   <div id="app">
     <div class="app-shell">
-      
       <div id="sidebar-container"></div>
-
       <main>
-        
         <header class="topbar">
           <h2>Minhas Compras</h2>
-          <div class="user-info" id="userEmail">Carregando...</div>
         </header>
-
-        <section id="page-compras">
+        <div class="divider" style="margin:14px 0"></div>
+        <section id="shopping-page">
           <div class="card">
-            
             <div class="toolbar" style="padding: 16px; border-bottom: 1px solid var(--border);">
-              <input id="filtroCompras" placeholder="Buscar por descrição ou loja" style="max-width: 300px;"/>
-              
-              <select id="filtroStatusCompra" style="max-width: 180px;">
+              <input id="shoppingFilter" placeholder="Look for description or store" style="max-width: 300px;"/>
+              <select id="shoppingStatusFilter" style="max-width: 180px;">
                 <option value="">Todos os status</option>
-                <option value="pago">Pago</option>
-                <option value="pendente">Pendente</option>
-                <option value="estornado">Estornado</option>
+                 <option value="paid">Pagas</option>
+                <option value="pending">Pendentes</option>
+                <option value="late">Atrasadas</option>
               </select>
-              
-              <button class="btn" id="btnNovaCompra">Nova compra (demo)</button>
+              <button class="btn" id="btnNewShopping">Nova compra</button>
             </div>
-
-            <table class="table" id="tblCompras" aria-label="Tabela de compras">
+            <table class="table" id="tblShoppings" aria-label="Shopings Table">
               <thead>
                 <tr>
                   <th>Descrição</th>
@@ -48,18 +40,12 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Teclado Mecânico</td>
-                  <td>Amazon</td>
-                  <td>05/10/2023</td>
-                  <td><span class="status pago">Pago</span></td>
-                  <td>R$ 250,00</td>
+                   <td colspan="4" style="text-align: center; color: #888;">Carregando dados...</td>
                 </tr>
               </tbody>
             </table>
-
           </div>
         </section>
-
       </main>
     </div>
   </div>

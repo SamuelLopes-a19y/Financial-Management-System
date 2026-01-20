@@ -2,13 +2,11 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config(); // Garante que o .env foi lido
 
 module.exports = (req, res, next) => {
-  console.log('--- INICIO DEBUG MIDDLEWARE ---');
 
   const authHeader = req.headers.authorization;
   
   // Verificar se o header chegou
   if (!authHeader) {
-    console.log('ERRO: Header Authorization não encontrado na requisição.');
     return res.status(401).json({ erro: 'Token não fornecido' });
   }
 
@@ -17,14 +15,12 @@ module.exports = (req, res, next) => {
   // Tentar separar o "Bearer" do token
   const parts = authHeader.split(' ');
   if (parts.length !== 2) {
-    console.log('ERRO: Formato do header inválido. Esperado: "Bearer <token>"');
     return res.status(401).json({ erro: 'Erro no formato do token' });
   }
 
   const [scheme, token] = parts;
 
   if (!/^Bearer$/i.test(scheme)) {
-    console.log('ERRO: Token mal formatado (não começa com Bearer)');
     return res.status(401).json({ erro: 'Token mal formatado' });
   }
 
@@ -37,11 +33,8 @@ module.exports = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    console.log('SUCESSO: Token decodificado:', decoded);
-    req.userId = decoded.id; // Ou decoded.userId (depende de como você gerou)
-    
-    console.log('--- FIM DEBUG MIDDLEWARE ---');
+    req.userId = decoded.id; 
+
     return next();
 
   } catch (err) {

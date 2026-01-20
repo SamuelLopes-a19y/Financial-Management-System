@@ -10,28 +10,26 @@
   
   <div id="app">
     <div class="app-shell">
-
       <div id="sidebar-container"></div>
-
       <main>
         <header class="topbar">
           <h2>Minhas Faturas</h2>
         </header>
-
-        <section id="page-faturas">
+        <div class="divider" style="margin:14px 0"></div>
+        <section id="invoice-page">
           <div class="card">
             
             <div class="toolbar" style="padding: 16px; border-bottom: 1px solid var(--border);">
-              <select id="filtroFatura" style="max-width: 200px;">
+              <select id="invoiceFilter" style="max-width: 200px;">
                 <option value="">Todas os Status</option>
-                <option value="pago">Pagas</option>
-                <option value="pendente">Pendentes</option>
-                <option value="atrasado">Atrasadas</option>
+                <option value="paid">Pagas</option>
+                <option value="pending">Pendentes</option>
+                <option value="late">Atrasadas</option>
               </select>
-              <button class="btn" id="btnGerarBoleto">Gerar boleto (demo)</button>
+              <button class="btn" id="btnGerarBoleto">Gerar Boleto</button>
             </div>
 
-            <table class="table" id="tblFaturas">
+            <table class="table" id="tblInvoice" aria-label="Invoice Table">
               <thead>
                 <tr>
                   <th>Descrição</th>
@@ -41,11 +39,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Cartão Crédito</td>
-                  <td>15/10/2023</td>
-                  <td><span class="status pendente">Pendente</span></td>
-                  <td>R$ 1.250,00</td>
+                 <tr>
+                   <td colspan="4" style="text-align: center; color: #888;">Carregando dados...</td>
                 </tr>
               </tbody>
             </table>

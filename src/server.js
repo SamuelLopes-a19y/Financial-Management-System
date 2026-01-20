@@ -1,45 +1,33 @@
-const express = require('express');
-const Autenticator = require('./Models/Autenticator');
+require('dotenv').config();
 
-//import Autenticator from '../Models/Autenticator';
-const autheticator = new Autenticator()
+const express = require('express')
+const path = require('path')
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const authRoutes = require('./routes/authRoutes')
+const userRoutes = require('./routes/userRoutes')
+//const invoiceRoutes = require('./routes/invoiceRoutes')
+const financeRoutes = require('./routes/financeRoutes')
 
-// Middleware
-app.use(express.json());
+const app = express()
 
-// Authentication Routes
-app.post('/auth/login', (req, res) => {
-    const { email, password } = req.body;
-    autheticator.authentication()
+// MIDDLEWARES
+app.use(express.json())
 
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password required' });
-    }
-    
-    // TODO: Validate credentials against database
-    res.json({ message: 'Login successful', token: 'jwt_token_here' });
-});
+// Arquivos estáticos (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, 'public'), { index: false }))
 
-app.post('/auth/logout', (req, res) => {
-    res.json({ message: 'Logout successful' });
-});
-app.use(express.urlencoded({ extended: true }));
+// ROTAS DA API
+app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
+//app.use('/api/invoices', invoiceRoutes)
+app.use('/api/finance', financeRoutes) 
 
-// Routes
+// ROTA INICIAL
 app.get('/', (req, res) => {
-    res.json({ message: 'Sistema de Gestão Financeira' });
-});
+  res.sendFile(path.join(__dirname, 'public', 'login.html'))
+})
 
-// Error handling
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Internal Server Error' });
-});
-
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// START SERVER
+app.listen(3000, () => {
+  console.log(' http://localhost:3000')
+})

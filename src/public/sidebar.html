@@ -7,14 +7,27 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <aside>
-  <div class="logo">Finance.io</div>
-  <nav aria-label="Menu principal">
-    <a href="overview.html" id="link-overview">🏠 Visão Geral</a>
-    <a href="shopping.html" id="link-compras">🧾 Compras</a>
-    <a href="invoice.html" id="link-faturas">💳 Faturas</a>
-    <a href="profile.html" id="link-perfil">⚙️ Perfil</a>
-  </nav>
-</aside>
+
+  <section id="app">
+    <div class="app-shell">
+      <aside>
+        <div class="logo">🏦 Painel do Cliente</div>
+        <div class="row" style="justify-content:space-between">
+          <span id="chipUser" class="chip">👤- </span>
+          <button class="btn ghost" id="btnLogout" title="Out">Sair</button>
+        </div>
+        <div class="divider" style="margin:14px 0"></div>
+        <nav aria-label="Menu principal">
+          <a href="overview.html" data-page="overview" class="active">🏠 Visão Geral</a>
+          <a href="shopping.html" data-page="shopping">🧾 Compras</a>
+          <a href="invoice.html" data-page="invoice">💳 Faturas</a>
+          <a href="profile.html" data-page="profile">⚙️ Perfil</a>
+        </nav>
+      </aside>
+    </div>
+  </section>
+
+  <script src="js/dashboard.js"></script>
 </body>
+
 </html>
