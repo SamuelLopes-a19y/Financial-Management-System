@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-const authMiddleware = require('../middlewares/authMiddleware')
 const financeController = require('../controllers/financeController')
+const authMiddleware = require('../middlewares/authMiddleware')
 
-router.get('/resumo', authMiddleware, financeController.resumo)
+router.get('/summary', authMiddleware, financeController.summary)
 
 module.exports = router
