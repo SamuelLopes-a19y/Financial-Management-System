@@ -3,7 +3,7 @@ const prisma = new PrismaClient()
 
 const updateUser = async (req, res) => {
   const { id } = req.params
-  const { name, email } = req.body
+  const { name, email, cpf, telefone } = req.body
 
   try {
     const user = await prisma.user.update({
@@ -13,7 +13,8 @@ const updateUser = async (req, res) => {
 
     res.json(user)
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao atualizar usuário' })
+    console.error(error)
+    res.status(500).json({ error: 'Erro ao atualizar usuário', details: error.message })
   }
 }
 
