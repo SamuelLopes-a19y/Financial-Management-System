@@ -1,47 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('loginForm');
+    console.log('1. Script carregado');
+    
+    // Try to get the form element
+    const form = document.getElementById('loginForm');
+    if (!form) {
+        console.error('ERRO CRÍTICO: Formulário "loginForm" não encontrado no HTML!');
+        return;
+    }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    const btn = form.querySelector('button') || document.querySelector('input[type="submit"]');
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        console.log('Botão clicado, enviando formulário...');
 
-    // Feedback visual no botão
-        const textoOriginal = btn.innerText;
-        btn.innerText = 'Verificando...';
-        btn.disabled = true;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        console.log('3. Dados capturados:', { email, password });
+
+        let textoOriginal = 'Acessar';
+        if (btn) {
+            textoOriginal = btn.innerText;
+            btn.innerText = 'Verificando...';
+            btn.disabled = true;
+        }
 
         try {
-            // 2. CHAMA O SERVIDOR PARA VERIFICAR
-            const response = await fetch('http://localhost:3000/api/login', {
+            console.log('Iniciando fetch para o servidor...');
+            
+            const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
 
-            // Se o servidor devolver erro (404 ou 401)
             if (!response.ok) {
-                throw new Error('Email ou senha incorretos.');
+                const errorData = await response.json().catch(() => ({}));
+                console.warn('Login falhou:', errorData);
+                throw new Error(errorData.message || 'Erro no servidor (Status ' + response.status + ')');
             }
 
-            // 3. SE SUCESSO: Pega os dados do usuário
             const user = await response.json();
 
-            // 4. SALVA NO NAVEGADOR (Para o index.html saber quem logou)
             localStorage.setItem('demo_id', user.id);
             localStorage.setItem('demo_email', user.email);
-
-            // 5. REDIRECIONA
+            if (user.token) localStorage.setItem('token', user.token);
+            
+            // Force redirection to dashboard
             window.location.href = '/index.html';
 
         } catch (err) {
-            console.error(err);
-            alert(err.message);
-            
-            // Devolve o botão ao normal
-            btn.innerText = textoOriginal;
-            btn.disabled = false;
+            console.error('ERRO CAPTURADO:', err);
+            alert('Erro: ' + err.message);
+
+            if (btn) {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            }
         }
-  });
+    });
 });
