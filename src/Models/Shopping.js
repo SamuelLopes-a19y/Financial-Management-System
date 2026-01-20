@@ -1,13 +1,13 @@
 class Shopping {
-    constructor(id, description, value, date, category) {
+    constructor(id, userId, category,description, value, date) {
         this.id = id;
+        this.userId = userId;
+        this.category = category;
         this.description = description;
         this.value = value;
         this.date = date;
-        this.category = category;
     }
 
-    // Add methods as needed
     getDetails() {
         return `${this.description} - R$ ${this.value} (${this.date})`;
     }

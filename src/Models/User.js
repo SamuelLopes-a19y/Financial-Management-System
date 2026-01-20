@@ -2,17 +2,17 @@ const { Role } = require('@prisma/client')
 
 class User {
 
-    constructor(id, name, email, password, role) {
+    constructor(id, cpf, name, email, password, telefone, role, shopping, wallet, invoices) {
         this.id = id
-        this.role = role    
+        this.cpf = cpf
         this.name = name
         this.email = email
         this.password = password
-        Object.assign(this, authenticatable)
-
-        if (!Object.values(Role).includes(this.role)) {
-             throw new Error("Role inválido!")
-        }
+        this.telefone = telefone
+        this.role = role  
+        this.shopping = shopping || [];
+        this.wallet = wallet || { balance: 0, currency: 'BRL' };
+        this.invoices = invoices  
 
         Object.assign(this, authenticatable)
     }

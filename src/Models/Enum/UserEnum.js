@@ -1,5 +1,4 @@
 /**
- * Enum para tipos de transação financeira.
  * @readonly
  * @enum {string}
  */

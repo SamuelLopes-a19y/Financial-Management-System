@@ -5,17 +5,15 @@ class Login {
         this.password = password;
     }
 
-    authenticate() {
-        // Add authentication logic here
-         
+    authenticate() {    
     }
 
     validateEmail(email) {
-        // Add email validation logic here
+     
     }
 
     validatePassword(password) {
-        // Add password validation logic here
+        
     }
 }
 

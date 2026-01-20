@@ -33,8 +33,8 @@ class Report {
                 console.log("Report successfuly created!")
             doc.end()
 
-        } catch (error) {
-            console.log("Report was not created. Try again!")
+        } catch (error) {   
+            console.error("Report was not created. Try again!", error)
         }
     }
 }

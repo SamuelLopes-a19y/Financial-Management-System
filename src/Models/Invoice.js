@@ -1,6 +1,7 @@
 class Invoice { // Fatura
-    constructor(id, description, amount, dueDate, status = 'pending') {
+    constructor(id, userId, description, amount, dueDate, status = 'pending') {
         this.id = id;
+        this.userId = userId;
         this.description = description;
         this.amount = amount;
         this.dueDate = dueDate;

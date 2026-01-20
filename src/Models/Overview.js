@@ -5,8 +5,6 @@ class Overview {
         this.saldo = saldo;
         this.ultimoLogin = ultimoLogin;
     }
-
-    // Add methods here
 }
 
 module.exports = Overview;

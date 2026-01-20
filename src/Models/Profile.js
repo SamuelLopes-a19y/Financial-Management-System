@@ -1,6 +1,6 @@
 class Profile {
-    constructor(id, name, email) {
-        this.id = id;
+    constructor(Userid, name, email) {
+        this.id = Userid;
         this.name = name;
         this.email = email;
     }
