@@ -1,153 +1,158 @@
-async function carregarSidebar() {
+
+async function loadSidebar() {
   try {
-    // 1. Busca o arquivo HTML do menu
-    // Ajuste o caminho '../components/sidebar.html' conforme sua pasta
-    const response = await fetch('./sidebar.html'); 
-    const html = await response.text();
+    const response = await fetch('./sidebar.html');
+    const html = await response.text()
+    
+    // Injeta o HTML dentro da div vazia
+    document.getElementById('sidebar-container').innerHTML = html
 
-    // 2. Injeta o HTML dentro da div vazia
-    document.getElementById('sidebar-container').innerHTML = html;
-
-    // 3. Destaca o link da página atual
-    destacarLinkAtual();
+    highlightCurrentLink()
 
   } catch (error) {
-    console.error('Erro ao carregar o menu:', error);
+    console.error('Error loading sidebar:', error)
   }
 }
 
-function destacarLinkAtual() {
-  // Pega o nome do arquivo atual (ex: "invoice.html")
-  const paginaAtual = window.location.pathname.split('/').pop();
+function highlightCurrentLink() {
+  // Pega o nome do arquivo atual na URL
+  const currentPage = window.location.pathname.split('/').pop()
+  let linkId = ''
 
-  // Mapeia qual arquivo corresponde a qual ID de link
-  // Se a paginaAtual for vazia (raiz), assume que é index.html
-  let linkId = '';
-
-  if (paginaAtual === 'index.html' || paginaAtual === '') {
-    linkId = 'link-overview';
-  } else if (paginaAtual === 'shopping.html') {
-    linkId = 'link-compras';
-  } else if (paginaAtual === 'invoice.html') {
-    linkId = 'link-faturas';
-  } else if (paginaAtual === 'profile.html') {
-    linkId = 'link-perfil';
+  // Define qual link deve ficar ativo baseado no arquivo
+  if (currentPage === 'index.html' || currentPage === '') {
+    linkId = 'link-overview'
+  } else if (currentPage === 'shopping.html') {
+    linkId = 'link-shopping'
+  } else if (currentPage === 'invoice.html') {
+    linkId = 'link-invoice'
+  } else if (currentPage === 'profile.html') {
+    linkId = 'link-profile'
   }
 
-  // Adiciona a classe 'active' no link correto
+  // Adiciona a classe active no link correto
   if (linkId) {
-    const linkAtivo = document.getElementById(linkId);
+    const linkAtivo = document.getElementById(linkId)
     if (linkAtivo) {
-      linkAtivo.classList.add('active');
+      linkAtivo.classList.add('active')
     }
   }
 }
 
-// Executa assim que o script carregar
-carregarSidebar();
+loadSidebar()
 
-async function carregarResumoFinanceiro(user) {
-  try {
-    // 1. Pega o token salvo no login (se houver autenticação)
-    const token = localStorage.getItem('token');
+function formatCoin(valor) {
+    return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
 
-    // 2. Faz a chamada real para o Backend
-    const response = await fetch(`${API_URL}/finance/resumo`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // Envia o token para a API saber quem é
-      }
-    });
+async function loadFinancialSummary() {
+    const token = localStorage.getItem('token')
 
-    if (!response.ok) throw new Error('Falha ao buscar dados');
-
-    // 3. Converte a resposta em JSON (Dados vindos do Banco)
-    const dados = await response.json();
-
-    // --- PREENCHER OS CARDS (ESTATÍSTICAS) ---
-    // O backend deve retornar algo como: { gasto: 1500, pendente: 200, assinaturas: 5, saldo: 5000 }
-    
-    // Helper para formatar dinheiro (R$)
-    const fmt = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-    if (document.getElementById('statGasto')) 
-      document.getElementById('statGasto').innerText = fmt(dados.gasto);
-    
-    if (document.getElementById('statPend')) 
-      document.getElementById('statPend').innerText = fmt(dados.pendente);
-      
-    if (document.getElementById('statAssin')) 
-      document.getElementById('statAssin').innerText = dados.assinaturas;
-      
-    if (document.getElementById('walletValue')) 
-      document.getElementById('walletValue').innerText = fmt(dados.saldo);
-
-
-    // --- PREENCHER A TABELA (SE ELA EXISTIR NA TELA) ---
-    // O backend deve retornar uma lista em 'dados.movimentacoes'
-    if (document.getElementById('tblRecentes') && dados.movimentacoes) {
-      preencherTabelaRecentes(dados.movimentacoes);
+    // Se não tiver token, manda de volta para o login
+    if (!token) {
+        window.location.href = 'login.html'
+        return;
     }
 
-  } catch (error) {
-    console.error("Erro na API:", error);
-    // Opcional: Mostrar feedback visual de erro na tela
-  }
+    try {
+        const response = await fetch('http://localhost:3000/api/finance/summary', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        // Se o token expirou, desloga o usuário
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            window.location.href = 'login.html'
+            return;
+        }
+
+        const data = await response.json()
+
+
+        // Gasto do mês 
+        const elGasto = document.getElementById('spenseValue')
+        if (elGasto) {
+            // Aceita os gastos
+            elGasto.innerText = formatCoin(data.expenses || 0)
+        }
+
+        // Faturas Pendentes (
+        const elPend = document.getElementById('pendingStatus')
+        if (elPend) {
+            elPend.innerText = formatCoin(data.pending || 0)
+        }
+
+        // Assinaturas Ativas
+        const elAssin = document.getElementById('sigStatus')
+        if (elAssin) {
+            elAssin.innerText = data.subscriptions || "0"
+        }
+
+        // Saldo em Carteira 
+        const elWallet = document.getElementById('walletValue')
+        if (elWallet) {
+            elWallet.innerText = formatCoin(data.balance || 0)
+        }
+
+        // Transaction Table
+        const transactionList = data.transactions || [];
+        if (Array.isArray(transactionList)) {
+            fullOutRecents(transactionList)
+        }
+
+    } catch (err) {
+        console.error("Error loading data:", err);
+
+        const elGasto = document.getElementById('spenseValue')
+        if(elGasto) elGasto.innerText = "---"
+    }
 }
 
-// Função para criar o HTML da tabela dinamicamente
-function preencherTabelaRecentes(listaMovimentacoes) {
-  const tbody = document.querySelector('#tblRecentes tbody');
-  tbody.innerHTML = ''; // Limpa dados antigos/falsos
+async function getUserChip() {
+// Implementar o nome do usuário no chip
 
-  listaMovimentacoes.forEach(item => {
-    // Cria uma nova linha (TR)
-    const tr = document.createElement('tr');
-
-    // Define a cor do chip baseada na categoria (exemplo simples)
-    const categoriaClass = item.categoria === 'Lazer' ? 'warn' : 'chip';
-
-    tr.innerHTML = `
-      <td>${item.descricao}</td>
-      <td>${new Date(item.data).toLocaleDateString('pt-BR')}</td>
-      <td><span class="${categoriaClass}">${item.categoria}</span></td>
-      <td>${item.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
-    `;
-
-    tbody.appendChild(tr);
-  });
 }
+getUserChip()
 
-async function carregarCompras() {
-  const response = await fetch(`${API_URL}/compras`); // Rota do backend
-  const compras = await response.json();
+// Preenche a tabela de transações recentes
+function fullOutRecents(shoppingList) {
+  const tbody = document.querySelector('#tblRecents tbody')
   
-  const tbody = document.querySelector('#tblCompras tbody');
-  tbody.innerHTML = '';
+  if (!tbody) return;
 
-  compras.forEach(compra => {
-    const tr = document.createElement('tr');
-    
-    // Lógica para cor do status
-    let statusClass = 'status ';
-    if(compra.status === 'Pago') statusClass += 'pago';
-    else if(compra.status === 'Pendente') statusClass += 'pendente';
-    else statusClass += 'atrasado';
+  tbody.innerHTML = ''; // Limpa o texto 
 
-    tr.innerHTML = `
-      <td>${compra.descricao}</td>
-      <td>${compra.loja}</td>
-      <td>${new Date(compra.data).toLocaleDateString('pt-BR')}</td>
-      <td><span class="${statusClass}">${compra.status}</span></td>
-      <td>${compra.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+  if (shoppingList.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #888;">None recent Transactions.</td></tr>'
+      return;
+  }
+
+  shoppingList.forEach(shopping => {
+    // Tratamento para garantir que não quebre se vier null do banco
+    const description = shopping.description || 'No description'
+    const dataRaw = shopping.date || new Date()
+    const category = shopping.category || 'General'
+    const value = shopping.value || shopping.amount || 0
+
+    const formattedDate = new Date(dataRaw).toLocaleDateString('pt-BR')
+    const formattedValue = formatCoin(value);
+
+    const tr = `
+      <tr>
+        <td>${description}</td>
+        <td>${formattedDate}</td>
+        <td><span class="chip">${category}</span></td>
+        <td>${formattedValue}</td>
+      </tr>
     `;
-    tbody.appendChild(tr);
+    
+    tbody.innerHTML += tr
   });
 }
 
-// Chame essa função se estiver na página de compras
-if (window.location.pathname.includes('shopping.html')) {
-  carregarCompras();
-}
-
+// Inicia a função principal ao carregar a página
+window.addEventListener('DOMContentLoaded', loadFinancialSummary);
