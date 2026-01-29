@@ -34,11 +34,15 @@ model Invoice {
 
 model Shopping {
   id          Int      @id @default(autoincrement())
-  description String
-  category    String?
+  userId      Int
+  store       String   // Novo campo: Loja
+  category    String?  // Categoria (Opcional, pois no JS pode vir null)
+  description String   // Descrição
+  status      String   // Novo campo: Status (ex: "paid", "pending")
   value       Decimal  @db.Decimal(10, 2)
   date        DateTime
-  userId      Int
+  
+  // Relacionamento
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

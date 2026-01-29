@@ -3,14 +3,20 @@ const prisma = new PrismaClient()
 
 async function main() {
 
+  // Limpa o banco antes de começar (Cuidado em produção!)
+  await prisma.shopping.deleteMany()
+  await prisma.invoice.deleteMany()
+  await prisma.wallet.deleteMany()
   await prisma.user.deleteMany()
-  console.log('Clear data Base.')
+  
+  console.log('Database limpo.')
 
+  // --- USUÁRIO 1: SAMUEL ---
   const samuel = await prisma.user.create({
     data: {
       name: 'Samuel Silva',
       email: 'samuel.silva@exemplo.com',
-      password: '123', 
+      password: '123', // Em um app real, use bcrypt para hash!
       cpf: '123.456.789-00',
       telefone: '(11) 99999-8888',
       role: 'ADMIN',
@@ -20,9 +26,10 @@ async function main() {
       },
       shoppings: {
         create: [
-          { description: 'Teclado Mecânico', category: 'Eletrônicos', value: 250.00, date: new Date() },
-          { description: 'Monitor Gamer', category: 'Trabalho', value: 1200.99, date: new Date('2023-12-25') },
-          { description: 'Almoço Executivo', category: 'Alimentação', value: 45.90, date: new Date() }
+          // ADICIONADO: store e status
+          { description: 'Teclado Mecânico', category: 'Eletrônicos', value: 250.00, date: new Date(), store: 'Kabum', status: 'Concluído' },
+          { description: 'Monitor Gamer', category: 'Trabalho', value: 1200.99, date: new Date('2023-12-25'), store: 'Terabyte Shop', status: 'Concluído' },
+          { description: 'Almoço Executivo', category: 'Alimentação', value: 45.90, date: new Date(), store: 'Restaurante Silva', status: 'Concluído' }
         ]
       },
       invoices: {
@@ -36,6 +43,7 @@ async function main() {
   })
   console.log(`Created User: ${samuel.name} (${samuel.role})`)
 
+  // --- USUÁRIO 2: MARIA ---
   const maria = await prisma.user.create({
     data: {
       name: 'Maria Souza',
@@ -49,15 +57,14 @@ async function main() {
       },
       shoppings: {
         create: [
-          { description: 'Supermercado Mensal', category: 'Casa', value: 600.00, date: new Date('2024-01-10') },
-          { description: 'Farmácia', category: 'Saúde', value: 85.50, date: new Date('2024-01-15') }
+          // ADICIONADO: store e status
+          { description: 'Supermercado Mensal', category: 'Casa', value: 600.00, date: new Date('2024-01-10'), store: 'Carrefour', status: 'Concluído' },
+          { description: 'Farmácia', category: 'Saúde', value: 85.50, date: new Date('2024-01-15'), store: 'Drogasil', status: 'Concluído' }
         ]
       },
       invoices: {
         create: [
-          // Fatura Vencida 
           { description: 'Empréstimo Pessoal', amount: 1500.00, dueDate: new Date('2023-12-01'), status: 'OVERDUE' },
-          // Fatura Paga 
           { description: 'Internet Fibra', amount: 100.00, dueDate: new Date('2024-01-05'), status: 'PAID' }
         ]
       }
@@ -65,6 +72,7 @@ async function main() {
   })
   console.log(`Created User: ${maria.name} (${maria.role})`)
 
+  // --- USUÁRIO 3: CARLOS ---
   const carlos = await prisma.user.create({
     data: {
       name: 'Carlos Oliveira',
@@ -77,9 +85,10 @@ async function main() {
       },
       shoppings: {
         create: [
-          { description: 'Macbook Pro', category: 'Trabalho', value: 12000.00, date: new Date('2024-02-01') },
-          { description: 'Cadeira Herman Miller', category: 'Conforto', value: 8000.00, date: new Date('2024-02-02') },
-          { description: 'Spotify Premium', category: 'Assinatura', value: 21.90, date: new Date() }
+          // ADICIONADO: store e status
+          { description: 'Macbook Pro', category: 'Trabalho', value: 12000.00, date: new Date('2024-02-01'), store: 'Apple Store', status: 'Concluído' },
+          { description: 'Cadeira Herman Miller', category: 'Conforto', value: 8000.00, date: new Date('2024-02-02'), store: 'Herman Miller', status: 'Concluído' },
+          { description: 'Spotify Premium', category: 'Assinatura', value: 21.90, date: new Date(), store: 'Spotify', status: 'Concluído' }
         ]
       },
       invoices: {
