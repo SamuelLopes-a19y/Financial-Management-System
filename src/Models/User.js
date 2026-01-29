@@ -21,4 +21,8 @@ class User {
         return this.role === Role.ADMIN
     }
 
+    getUser(){
+        
+    }
+
 }
