@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Try to get the form element
     const form = document.getElementById('loginForm');
     if (!form) {
-        console.error('ERRO CRÍTICO: Formulário "loginForm" não encontrado no HTML!');
+        console.error('Formulário "loginForm" não encontrado no HTML!');
         return;
     }
 
@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('Botão clicado, enviando formulário...');
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (user.token) localStorage.setItem('token', user.token);
             
             // Force redirection to dashboard
-            window.location.href = '/index.html';
+            window.location.href = '/overview.html';
 
         } catch (err) {
             console.error('ERRO CAPTURADO:', err);

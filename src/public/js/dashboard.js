@@ -72,7 +72,6 @@ async function loadFinancialSummary() {
 
         const data = await response.json()
 
-
         // Gasto do mês 
         const elGasto = document.getElementById('spenseValue')
         if (elGasto) {
@@ -99,47 +98,66 @@ async function loadFinancialSummary() {
         }
 
         // Transaction Table
-        const transactionList = data.transactions || [];
+        const transactionList = data.transactions || []
         if (Array.isArray(transactionList)) {
             fullOutRecents(transactionList)
         }
 
     } catch (err) {
-        console.error("Error loading data:", err);
-
-        const elGasto = document.getElementById('spenseValue')
-        if(elGasto) elGasto.innerText = "---"
+        console.error("Error loading data:", err)
     }
 }
 
 async function getUserChip() {
-// Implementar o nome do usuário no chip
+    try {
+        const token = localStorage.getItem('token')
 
+        const response = await fetch('http://localhost:3000/api/user/getUser', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }
+      })
+
+      if(!response.ok){
+          console.error('Failed to fetch user data')
+          return;
+      }
+
+      const data = await response.json()
+      const elNome = document.getElementById('chipUser')
+
+      if(elNome){
+         elNome.innerText = `👤 - ${data.name}`
+      }  
+    } catch (error) {
+      console.error('Error fetching user data:', error)
+    }
 }
 getUserChip()
+
 
 // Preenche a tabela de transações recentes
 function fullOutRecents(shoppingList) {
   const tbody = document.querySelector('#tblRecents tbody')
   
-  if (!tbody) return;
+  if (!tbody) return
 
   tbody.innerHTML = ''; // Limpa o texto 
 
   if (shoppingList.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #888;">None recent Transactions.</td></tr>'
-      return;
   }
 
   shoppingList.forEach(shopping => {
-    // Tratamento para garantir que não quebre se vier null do banco
     const description = shopping.description || 'No description'
     const dataRaw = shopping.date || new Date()
     const category = shopping.category || 'General'
     const value = shopping.value || shopping.amount || 0
 
     const formattedDate = new Date(dataRaw).toLocaleDateString('pt-BR')
-    const formattedValue = formatCoin(value);
+    const formattedValue = formatCoin(value)
 
     const tr = `
       <tr>
@@ -148,9 +166,10 @@ function fullOutRecents(shoppingList) {
         <td><span class="chip">${category}</span></td>
         <td>${formattedValue}</td>
       </tr>
-    `;
+    `
     
     tbody.innerHTML += tr
+
   });
 }
 
