@@ -1,33 +1,32 @@
+const cors = require('cors')
 require('dotenv').config();
-
-const express = require('express')
+const express = require('express') 
 const path = require('path')
+
+const app = express() 
+
+app.use(cors()); 
 
 const authRoutes = require('./routes/authRoutes')
 const userRoutes = require('./routes/userRoutes')
-//const invoiceRoutes = require('./routes/invoiceRoutes')
 const financeRoutes = require('./routes/financeRoutes')
-
-const app = express()
+const shoppingRoutes = require('./routes/shoppingRoutes')
 
 // MIDDLEWARES
 app.use(express.json())
-
-// Arquivos estáticos (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public'), { index: false }))
 
 // ROTAS DA API
 app.use('/api/auth', authRoutes)
-app.use('/api/users', userRoutes)
-//app.use('/api/invoices', invoiceRoutes)
+app.use('/api/user', userRoutes) 
 app.use('/api/finance', financeRoutes) 
+app.use('/api/shopping', shoppingRoutes)
 
 // ROTA INICIAL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'))
+  res.sendFile(path.join(__dirname, 'public', 'overview.html'))
 })
 
-// START SERVER
 app.listen(3000, () => {
-  console.log(' http://localhost:3000')
+  console.log('Servidor rodando em http://localhost:3000')
 })
